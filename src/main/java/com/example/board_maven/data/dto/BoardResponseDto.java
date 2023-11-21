@@ -16,8 +16,7 @@ public class BoardResponseDto {
     private String title;
     private String contents;
     private String useYn;
-    private Long createId;
+    private String createId;
     private LocalDateTime createdAt;
-//    private Long updateId;
     private LocalDateTime updatedAt;
 }

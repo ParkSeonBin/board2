@@ -28,8 +28,7 @@ public class Board extends BaseEntity {
     @Column(length = 1)
     private String useYn;
 
-    @Column(length = 20)
-    private Long createId;
-//    @Column(length = 20)
-//    private Long updateId;
+    @ManyToOne
+    @JoinColumn(name = "createId")
+    private BoardUser createId;
 }

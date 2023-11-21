@@ -35,7 +35,6 @@ public class BoardServiceImpl implements BoardService {
         board.setUpdatedAt(LocalDateTime.now());
 
         Board savedBoard = boardRepository.save(board);
-        savedBoard.setCreateId(board.getId());  //?
         boardRepository.save(savedBoard);
 
         LOGGER.info("[save] savedBoard : {}", savedBoard);
