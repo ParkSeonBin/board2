@@ -8,18 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import com.example.board_maven.service.UserDetailsService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 /**
  * JWT 토큰을 생성하고 유효성을 검증하는 컴포넌트 클래스 JWT 는 여러 암호화 알고리즘을 제공하고 알고리즘과 비밀키를 가지고 토큰을 생성
@@ -36,6 +33,7 @@ import java.util.List;
 public class JwtTokenProvider {
 
     private final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private final UserDetailsService userDetailsService;
 
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey"; //토큰을 생성하기 위해서 secretKey가 필요
@@ -77,29 +75,13 @@ public class JwtTokenProvider {
     // JWT 토큰으로 인증 정보 조회
     public Authentication getAuthentication(String token) {
         LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 시작");
-
-        // 역할 정보 추출
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        String tokenUserId = (String) claims.get("userId");
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserId = ((UserDetails) authentication.getPrincipal()).getUsername();
-
-
-        if (tokenUserId.equals(currentUserId)) {
-            LOGGER.info("[getAuthentication] 인증 정보를 확인하세요. UserDetails UserEmail: {}, Roles: {}", currentUserId, "My");
-
-            // 역할 정보를 기반으로 권한 부여
-            List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_" + "My");
-
-            return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), "", authorities);
-        } else {
-            // Handle the case where the userId in the token does not match the currently logged-in user.
-            // You can throw an exception or handle it as needed.
-            LOGGER.warn("[getAuthentication] Token userId does not match the currently logged-in user.");
-            return null; // Or handle it as needed in your application
-        }
+        UserDetails userDetails = userDetailsService.loadByUsername(this.getUserId(token));
+        LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 완료, UserDetails UserName : {}",
+                userDetails.getUsername());
+        return new UsernamePasswordAuthenticationToken(userDetails, "",
+                userDetails.getAuthorities());
     }
+
 
     // 예제 13.14
     // JWT 토큰에서 회원 구별 정보 추출

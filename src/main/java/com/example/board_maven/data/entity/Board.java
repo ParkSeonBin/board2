@@ -29,6 +29,6 @@ public class Board extends BaseEntity {
     private String useYn;
 
     @ManyToOne
-    @JoinColumn(name = "createId")
+    @JoinColumn(name = "createId", referencedColumnName = "userId")
     private BoardUser createId;
 }

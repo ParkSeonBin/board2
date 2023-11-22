@@ -14,9 +14,7 @@ public class ChangeBoardDto {
     private String contents;
     private String useYn;
 
-
-    public ChangeBoardDto(Long id, String title, String contents, String useYn) {
-        this.id = id;
+    public ChangeBoardDto(String title, String contents, String useYn) {
         this.title = title;
         this.contents = contents;
         this.useYn = useYn;
@@ -24,5 +22,4 @@ public class ChangeBoardDto {
 
     public ChangeBoardDto() {
     }
-
 }

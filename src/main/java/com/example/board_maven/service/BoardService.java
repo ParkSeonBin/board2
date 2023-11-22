@@ -14,7 +14,7 @@ public interface BoardService {
 
     BoardResponseDto findById(Long id);
 
-    BoardResponseDto updateBoard(ChangeBoardDto changeBoardDto);
+    BoardResponseDto updateBoard(ChangeBoardDto changeBoardDto) throws Exception;
 
     void deleteBoard(Long id);
 }
