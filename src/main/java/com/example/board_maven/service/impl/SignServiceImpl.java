@@ -6,6 +6,7 @@ import com.example.board_maven.data.dto.SignInResultDto;
 import com.example.board_maven.data.dto.SignUpResultDto;
 import com.example.board_maven.data.dto.UserRequestDto;
 import com.example.board_maven.data.entity.BoardUser;
+import com.example.board_maven.data.entity.Role;
 import com.example.board_maven.data.repository.UserRepository;
 import com.example.board_maven.service.SignService;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 
@@ -41,6 +41,7 @@ public class SignServiceImpl implements SignService {
         boardUser = BoardUser.builder()
                 .userId(userRequestDto.getUserId())
                 .pwd(passwordEncoder.encode(userRequestDto.getPwd()))
+                .role(Role.USER)
                 .build();
 
         boardUser.setCreatedAt(LocalDateTime.now());
@@ -64,7 +65,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public SignInResultDto SignIn(String userId, String pwd){
+    public SignInResultDto SignIn(String userId, String pwd) throws RuntimeException{
         LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
         BoardUser boardUser = userRepository.findByUserId(userId);
         LOGGER.info("[getSignInResult] boardUser : {}", userId);
@@ -78,8 +79,9 @@ public class SignServiceImpl implements SignService {
 
         LOGGER.info("[getSignInResult] SignInResultDto 객체 생성");
         SignInResultDto signInResultDto = SignInResultDto.builder()
-                .token(jwtTokenProvider.createToken(boardUser.getUserId()))
+                .token(jwtTokenProvider.createToken(String.valueOf(boardUser.getUserId()), boardUser.getRole()))
                 .build();
+
 
         LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");
         setSuccessResult(signInResultDto);

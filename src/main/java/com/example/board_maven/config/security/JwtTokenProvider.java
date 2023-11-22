@@ -1,5 +1,6 @@
 package com.example.board_maven.config.security;
 
+import com.example.board_maven.data.entity.Role;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -55,9 +56,10 @@ public class JwtTokenProvider {
 
     // 예제 13.12
     // JWT 토큰 생성
-    public String createToken(String userId) {
+    public String createToken(String userId, Role role) {
         LOGGER.info("[createToken] 토큰 생성 시작");
         Claims claims = Jwts.claims().setSubject(userId); //토큰의 내용에 값을 넣기 위한 Claims 객체
+        claims.put("roles", role); //사용자의 권한을 값
 
         Date now = new Date();
         String token = Jwts.builder() //토큰 생성

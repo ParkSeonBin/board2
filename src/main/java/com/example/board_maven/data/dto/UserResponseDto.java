@@ -15,6 +15,7 @@ public class UserResponseDto {
     private Long id;
     private String userId;
     private String pwd;
+    private String role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

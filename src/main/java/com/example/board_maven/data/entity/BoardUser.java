@@ -24,4 +24,8 @@ public class BoardUser extends BaseEntity {
     private String userId;
 
     private String pwd;
+
+    @Column(length = 10)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
