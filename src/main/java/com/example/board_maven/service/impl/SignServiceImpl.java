@@ -7,6 +7,7 @@ import com.example.board_maven.data.dto.SignUpResultDto;
 import com.example.board_maven.data.dto.UserRequestDto;
 import com.example.board_maven.data.entity.BoardUser;
 import com.example.board_maven.data.entity.Role;
+import com.example.board_maven.data.repository.BoardRepository;
 import com.example.board_maven.data.repository.UserRepository;
 import com.example.board_maven.service.SignService;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 
@@ -25,13 +27,15 @@ public class SignServiceImpl implements SignService {
 
     public UserRepository userRepository;
     public JwtTokenProvider jwtTokenProvider;
+    public BoardRepository boardRepository;
     public PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SignServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+    public SignServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, BoardRepository boardRepository) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.boardRepository = boardRepository;
     }
 
     @Override

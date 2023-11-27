@@ -50,6 +50,7 @@ public class BoardServiceImpl implements BoardService {
         if (authentication != null) {
             LOGGER.info("Principal class: {}", authentication.getPrincipal().getClass());
         }
+
         // Check if the authentication object is not null and the principal is a UserDetails instance
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

@@ -45,11 +45,9 @@ public class JwtTokenProvider {
      */
     @PostConstruct //애플리케이션이 가동되면 자동으로 init() 실행
     protected void init() {
-        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작");
-        System.out.println(secretKey);
+        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작 : {}", secretKey);
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8)); //secretKey를 Base64 형식으로 인코딩
-        System.out.println(secretKey);
-        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
+        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료 : {}", secretKey);
     }
 
     // 예제 13.12
@@ -58,8 +56,8 @@ public class JwtTokenProvider {
         LOGGER.info("[createToken] 토큰 생성 시작");
         Claims claims = Jwts.claims().setSubject(userId); //토큰의 내용에 값을 넣기 위한 Claims 객체
         claims.put("roles", role); //사용자의 권한을 값
-
         Date now = new Date();
+
         String token = Jwts.builder() //토큰 생성
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -119,5 +117,11 @@ public class JwtTokenProvider {
             LOGGER.error("[validateToken] 토큰 유효 체크 예외 발생", e);
             return false;
         }
+    }
+
+    public String extractUserId(String token) {
+        // Extracting the user ID claim from the token
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }
