@@ -1,20 +1,24 @@
 package com.example.board_maven.service;
 
 import com.example.board_maven.data.dto.BoardRequestDto;
-import com.example.board_maven.data.dto.BoardResponseDto;
-import com.example.board_maven.data.dto.ChangeBoardDto;
-import com.example.board_maven.data.entity.Board;
+import com.example.board_maven.data.dto.ListDto;
+import com.example.board_maven.data.dto.UpdateDto;
+import com.example.board_maven.data.dto.UpdateFormDto;
+import com.example.board_maven.data.entity.DetailDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface BoardService {
-    BoardResponseDto savaBoard(BoardRequestDto boardRequestDto);
+    ResponseEntity save(BoardRequestDto formDTO);
 
-    List<Board> findAll();
+    List<ListDto> getAll();
 
-    BoardResponseDto findById(Long id);
+    DetailDto getDetail(Long id, String memberId);
 
-    BoardResponseDto updateBoard(ChangeBoardDto changeBoardDto) throws Exception;
+    ResponseEntity remove(Long id);
 
-    void deleteBoard(Long id);
+    UpdateDto getUpdateDto(Long id);
+
+    ResponseEntity update(Long id, UpdateFormDto updateFormDto);
 }

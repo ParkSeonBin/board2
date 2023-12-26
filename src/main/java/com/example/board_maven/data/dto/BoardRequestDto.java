@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class BoardRequestDto {
     private String title;
-    private String contents;
-    private String useYn;
+    private String content;
+    private String createId;
 }

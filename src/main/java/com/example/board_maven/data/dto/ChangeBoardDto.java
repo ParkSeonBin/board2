@@ -11,12 +11,12 @@ public class ChangeBoardDto {
     private Long id;
 
     private String title;
-    private String contents;
+    private String content;
     private String useYn;
 
-    public ChangeBoardDto(String title, String contents, String useYn) {
+    public ChangeBoardDto(String title, String content, String useYn) {
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.useYn = useYn;
     }
 

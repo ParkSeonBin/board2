@@ -1,6 +1,8 @@
 package com.example.board_maven.data.entity;
 
+import com.example.board_maven.data.dto.UpdateFormDto;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Builder
 @Setter
 @NoArgsConstructor
+@DynamicUpdate
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -23,12 +26,18 @@ public class Board extends BaseEntity {
     @Column(length = 50)
     private String title;
 
-    private String contents;
+    private String content;
 
     @Column(length = 1)
-    private String useYn;
+    @Enumerated(EnumType.STRING)
+    private useYn useYn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createId", referencedColumnName = "userId")
     private BoardUser createId;
+
+    public void update(UpdateFormDto updateFormDto) {
+        this.title = updateFormDto.getTitle();
+        this.content = updateFormDto.getContent();
+    }
 }
