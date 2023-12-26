@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head th:replace="~{fragment/header::headerFragment(~{::title})}">
+    <title th:text="상세"></title>
+</head>
+
+<body >
+<th:block layout:fragment="content">
+    <h1 th:text="${post.title}"></h1>
+    <div id="content-box">
+        <div>글번호 : <span th:text="${post.id}"></span></div>
+        <div>등록 일시 : <span th:text="${post.createdAt}"></span></div>
+        <div>수정 일시 : <span th:text="${post.updatedAt}"></span></div>
+        <div>작성자 : <span th:text="${post.createId}"></span></div>
+        <div>글 내용</div>
+        <div id="line" th:text="${post.content}"></div>
+    </div>
+    <div>
+        <button id="update" type="button">수정</button>
+        <button id="remove" type="button">삭제</button>
+    </div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function () {
+            /*<![CDATA[*/
+
+            var nowId = /*[[${now}]]*/'';
+            var createId = /*[[${post.createId}]]*/'';
+            var id = /*[[${post.id}]]*/'';
+
+            $('#remove').click((event) => {
+                if (nowId != createId) {
+                    console.log(id);
+                    console.log(createId);
+                    console.log("nowId:", nowId);
+                    console.log(localStorage.getItem('id'));
+                    alert('권한이 없습니다');
+                } else {
+                    const path = 'http://localhost:8080/api/posts/' + id;
+
+                    $.ajax({
+                        url: path,
+                        type: 'DELETE',
+                        contentType: 'application/json',
+                    }).done((response) => {
+                        console.log(response);
+                        console.log(id);
+                        console.log(createId);
+                        console.log("nowId:", nowId);
+                        console.log(localStorage.getItem('id'));
+                        if (response === 'success') {
+                            alert('삭제 성공')
+                            location.href = "http://localhost:8080"
+                        } else {
+                            alert(response);
+                        }
+                    });
+                }
+            })
+
+            $('#update').click((event) => {
+                if (nowId != createId) {
+                    alert('권한이 없습니다');
+                } else {
+                    location.href = "http://localhost:8080/update/" + id;
+                }
+            })
+        });
+
+        /*]]*/
+    </script>
+</th:block>
+</body>
+</html>

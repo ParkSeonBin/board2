@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head th:replace="~{fragment/header::headerFragment(~{::title})}">
+    <title th:text="Home"></title>
+    <meta charset="UTF-8">
+</head>
+<body >
+
+<th:block layout:fragment="content">
+    <h1>content</h1>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        console.log('Home')
+    </script>
+</th:block>
+
+<th:block layout:fragment="content">
+    <h1>리스트</h1>
+    <table>
+        <thead class="thead-light">
+        <tr class="text-center">
+            <th scope="col">글번호</th>
+            <th scope="col">글제목</th>
+            <th scope="col">작성 시간</th>
+            <th scope="col">작성자</th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr th:each="p : ${posts}" th:id="${p.id}" th:onclick="'location.href=\'' + @{/{id}(id=${p.id})} + '\''">
+<!--        <tr th:each="p : ${posts}">-->
+            <td scope="row" width="10%">
+                <div th:text="${p.id}"></div>
+            </td>
+            <td scope="row" width="20%">
+                <div th:text="${p.title}"></div>
+            </td>
+            <td scope="row" width="20%">
+                <div th:text="${p.createdAt}"></div>
+            </td>
+            <td scope="row" width="20%">
+                <div th:text="${p.createId}"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        console.log('Home')
+
+        function view(id) {
+            location.href = "http://localhost:8080/"+id
+        }
+
+    </script>
+</th:block>
+</body>
+</html>
